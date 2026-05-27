@@ -1,0 +1,5 @@
+notebooks
+.env
+.vscode
+db
+__pycache__
