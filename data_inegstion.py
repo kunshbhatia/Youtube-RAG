@@ -19,9 +19,10 @@ def data_ingestion(video_link,session_id):
 
     lang_success = False
     for lang_code in possible_languages:
-
         try:
-            data = ytt_api.fetch(video_id,languages=[lang_code])
+            lang_list = []
+            lang_list.append(lang_code)
+            data = ytt_api.fetch(video_id,languages=lang_list)
             lang = lang_code
             lang_success = True
             break
