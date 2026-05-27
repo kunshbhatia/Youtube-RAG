@@ -6,42 +6,39 @@ from langchain_chroma import Chroma #Vector DB
 from googletrans import Translator #To Translate the text to english for LLM
 import httpx #Remove Timeout
 from utilities import get_video_details
+import streamlit as st
 import requests
 
 def data_ingestion(video_link,session_id):
     #GETTING VIDEO INFO FROM YOUTUBE
-    url = video_link.split("=")
-
+    proxy_user = st.secrets["PROXY_USER"]
+    proxy_pass = st.secrets["PROXY_PASS"]
+    proxy_host = st.secrets["PROXY_HOST"]
+    proxy_port = st.secrets["PROXY_PORT"]
+    proxy = f"http://{proxy_user}:{proxy_pass}@{proxy_host}:{proxy_port}"
     session = requests.Session()
+
+    session.proxies = {
+    "http": proxy,
+    "https": proxy
+    }
     session.headers.update({
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/122.0.0.0 Safari/537.36"
-        )
-    })
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/122.0.0.0 Safari/537.36"
+    )})
 
-    ytt_api = YouTubeTranscriptApi(http_client=session)
+    ytt_api = YouTubeTranscriptApi(http_client=session) #To Bypass IP Block on deployed server
 
-    video_id = url[1]
-
-    try:
-        # First try English transcript
-        data = ytt_api.fetch(
-            video_id,
-            languages=['en']
-        )
+    url = video_link.split("=")
+    transcript_list = ytt_api.list(url[1])
+    language_codes = [t.language_code for t in transcript_list]
+    if 'en' in language_codes:
         lang = 'en'
-
-    except Exception:
-
-        try:
-            # fallback to any available transcript
-            data = ytt_api.fetch(video_id)
-            lang = 'unknown'
-
-        except Exception as e:
-            raise Exception(f"Transcript fetch failed: {e}")
+    else:
+        lang = language_codes[0]
+    data = ytt_api.fetch(url[1],languages=[f'{lang}'])
 
     text_data = '' #Adding all the text in string format in local language
     for sent in data.snippets:
