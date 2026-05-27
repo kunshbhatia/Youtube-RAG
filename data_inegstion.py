@@ -42,8 +42,8 @@ def data_ingestion(video_link,session_id):
         except:
             continue
 
-    if not lang_success:
-        raise Exception("No transcript available")
+#    if not lang_success:
+#        raise Exception("No transcript available")
 
     text_data = '' #Adding all the text in string format in local language
     for sent in data.snippets:
