@@ -20,21 +20,29 @@ def data_ingestion(video_link,session_id):
         )
     })
 
-    ytt_api = YouTubeTranscriptApi(http_client=session)
-    try:
-        transcript_list = ytt_api.list(url[1])
+    video_id = url[1]
 
-    except Exception:  # Fallback Method
-        transcript_list = ytt_api.fetch(
-            url[1],
-            languages=['en'])
-        
-    language_codes = [t.language_code for t in transcript_list]
-    if 'en' in language_codes:
+    ytt_api = YouTubeTranscriptApi(http_client=session)
+
+    try:
+        # Directly fetch english transcript
+        data = ytt_api.fetch(
+            video_id,
+            languages=['en']
+        )
+
         lang = 'en'
-    else:
-        lang = language_codes[0]
-    data = ytt_api.fetch(url[1],languages=[f'{lang}'])
+
+    except Exception:
+
+        try:
+            # Fallback to any available language
+            data = ytt_api.fetch(video_id)
+
+            lang = 'unknown'
+
+        except Exception as e:
+            raise Exception(f"Transcript fetch failed: {e}")
 
     text_data = '' #Adding all the text in string format in local language
     for sent in data.snippets:
