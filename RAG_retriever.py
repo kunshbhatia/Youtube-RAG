@@ -6,6 +6,11 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 import streamlit as st
 
+try:
+    groq_api = st.secrets["GROQ_API_KEY"] #Streamlit Use
+except:
+    groq_api = ["GROQ_API_KEY"] #Personal Use
+
 def rag_retriever(query,session_id,queries=[]):
     embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     #Made by Kunsh Bhatia
@@ -17,7 +22,7 @@ def rag_retriever(query,session_id,queries=[]):
 
     load_dotenv()
     model = ChatGroq(
-        api_key=os.getenv(st.secrets["GROQ_API_KEY"]),
+        api_key=os.getenv(groq_api),
         temperature=0,
         model_name="llama-3.1-8b-instant"
     )
@@ -41,7 +46,7 @@ def rag_retriever(query,session_id,queries=[]):
     video_context = "\n\n".join([doc.page_content for doc in relevant_docs])
 
     model = ChatGroq(
-        api_key=os.getenv(st.secrets["GROQ_API_KEY"]),
+        api_key=os.getenv(groq_api),
         temperature=0.1,
         model_name="llama-3.1-8b-instant"
             )

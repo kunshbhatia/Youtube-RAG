@@ -11,34 +11,26 @@ import requests
 
 def data_ingestion(video_link,session_id):
     #GETTING VIDEO INFO FROM YOUTUBE
-    proxy_user = st.secrets["PROXY_USER"]
-    proxy_pass = st.secrets["PROXY_PASS"]
-    proxy_host = st.secrets["PROXY_HOST"]
-    proxy_port = st.secrets["PROXY_PORT"]
-    proxy = f"http://{proxy_user}:{proxy_pass}@{proxy_host}:{proxy_port}"
-    session = requests.Session()
-
-    session.proxies = {
-    "http": proxy,
-    "https": proxy
-    }
-    session.headers.update({
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/122.0.0.0 Safari/537.36"
-    )})
-
-    ytt_api = YouTubeTranscriptApi(http_client=session) #To Bypass IP Block on deployed server
-
+    ytt_api = YouTubeTranscriptApi() #To Bypass IP Block on deployed server
     url = video_link.split("=")
-    transcript_list = ytt_api.list(url[1])
-    language_codes = [t.language_code for t in transcript_list]
-    if 'en' in language_codes:
-        lang = 'en'
-    else:
-        lang = language_codes[0]
-    data = ytt_api.fetch(url[1],languages=[f'{lang}'])
+    video_id = url[1]
+
+    possible_languages = ['en','hi','en-IN','en-US','a.en','a.hi','bn','ta','te','ml','kn','mr','gu','pa','ur','fr','de','es','ja','ko','ar','ru']
+
+    lang_success = False
+    for lang_code in possible_languages:
+
+        try:
+            data = ytt_api.fetch(video_id,languages=[lang_code])
+            lang = lang_code
+            lang_success = True
+            break
+
+        except:
+            continue
+
+    if not lang_success:
+        raise Exception("No transcript available")
 
     text_data = '' #Adding all the text in string format in local language
     for sent in data.snippets:
