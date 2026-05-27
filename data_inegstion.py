@@ -1,4 +1,5 @@
 from youtube_transcript_api import YouTubeTranscriptApi #Access to Youtube
+from youtube_transcript_api.proxies import WebshareProxyConfig
 from langchain_core.documents import Document  #Formating
 from langchain_text_splitters import RecursiveCharacterTextSplitter #For Chunking
 from langchain_huggingface import HuggingFaceEmbeddings #Embedding Model
@@ -11,18 +12,11 @@ import requests
 
 def data_ingestion(video_link,session_id):
     #GETTING VIDEO INFO FROM YOUTUBE
-    session = requests.Session()
 
-    session.headers.update({
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/122.0.0.0 Safari/537.36"
-        ),
-        "Accept-Language": "en-US,en;q=0.9"
-    })
-
-    ytt_api = YouTubeTranscriptApi(http_client=session) #To Bypass IP Block on deployed server
+    ytt_api = YouTubeTranscriptApi(proxy_config=WebshareProxyConfig(
+        proxy_username=st.secrets["YOUR_USERNAME"],
+        proxy_password=st.secrets["YOUR_PASSWORD"])) #To Bypass IP Block on deployed server
+    
     url = video_link.split("=")
     video_id = url[1]
 
@@ -42,8 +36,8 @@ def data_ingestion(video_link,session_id):
         except:
             continue
 
-#    if not lang_success:
-#        raise Exception("No transcript available")
+    if not lang_success:
+        raise Exception("No transcript available")
 
     text_data = '' #Adding all the text in string format in local language
     for sent in data.snippets:
