@@ -6,12 +6,29 @@ from langchain_chroma import Chroma #Vector DB
 from googletrans import Translator #To Translate the text to english for LLM
 import httpx #Remove Timeout
 from utilities import get_video_details
+import requests
 
 def data_ingestion(video_link,session_id):
     #GETTING VIDEO INFO FROM YOUTUBE
     url = video_link.split("=")
-    ytt_api = YouTubeTranscriptApi()
-    transcript_list = ytt_api.list(url[1])
+    session = requests.Session()
+    session.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/122.0.0.0 Safari/537.36"
+        )
+    })
+
+    ytt_api = YouTubeTranscriptApi(http_client=session)
+    try:
+        transcript_list = ytt_api.list(url[1])
+
+    except Exception:  # Fallback Method
+        transcript_list = ytt_api.fetch(
+            url[1],
+            languages=['en'])
+        
     language_codes = [t.language_code for t in transcript_list]
     if 'en' in language_codes:
         lang = 'en'
