@@ -22,7 +22,6 @@ def data_ingestion(video_link,session_id):
     ytt_api = YouTubeTranscriptApi(http_client=session) #To Bypass IP Block on deployed server
 
     url = video_link.split("=")
-    ytt_api = YouTubeTranscriptApi()
     transcript_list = ytt_api.list(url[1])
     language_codes = [t.language_code for t in transcript_list]
     if 'en' in language_codes:
