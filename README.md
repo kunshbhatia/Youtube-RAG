@@ -246,7 +246,7 @@ python-dotenv
 
 Made by **Kunsh Bhatia**
 
-GitHub: https://github.com/your-github-username
+GitHub: https://github.com/kunshbhatia/Youtube-RAG
 
 ---
 
