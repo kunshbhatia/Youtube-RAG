@@ -11,24 +11,37 @@ import requests
 def data_ingestion(video_link,session_id):
     #GETTING VIDEO INFO FROM YOUTUBE
     url = video_link.split("=")
-    session = requests.Session() #Buffer Session to bypass block IP chance 
+
+    session = requests.Session()
     session.headers.update({
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/122.0.0.0 Safari/537.36"
-        )})
+        )
+    })
 
-    ytt_api = YouTubeTranscriptApi(http_client=session) #To Bypass IP Block on deployed server
+    ytt_api = YouTubeTranscriptApi(http_client=session)
 
-    url = video_link.split("=")
-    transcript_list = ytt_api.list(url[1])
-    language_codes = [t.language_code for t in transcript_list]
-    if 'en' in language_codes:
+    video_id = url[1]
+
+    try:
+        # First try English transcript
+        data = ytt_api.fetch(
+            video_id,
+            languages=['en']
+        )
         lang = 'en'
-    else:
-        lang = language_codes[0]
-    data = ytt_api.fetch(url[1],languages=[f'{lang}'])
+
+    except Exception:
+
+        try:
+            # fallback to any available transcript
+            data = ytt_api.fetch(video_id)
+            lang = 'unknown'
+
+        except Exception as e:
+            raise Exception(f"Transcript fetch failed: {e}")
 
     text_data = '' #Adding all the text in string format in local language
     for sent in data.snippets:
