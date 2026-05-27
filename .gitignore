@@ -3,3 +3,4 @@ notebooks
 .vscode
 db
 __pycache__
+.streamlit

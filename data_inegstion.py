@@ -19,6 +19,7 @@ def data_ingestion(video_link,session_id):
     
     url = video_link.split("=")
     video_id = url[1]
+    print('here 1')
 
     possible_languages = ['en','hi','en-IN','en-US','a.en','a.hi','bn','ta','te','ml','kn','mr','gu','pa','ur','fr','de','es','ja','ko','ar','ru']
 
@@ -28,6 +29,7 @@ def data_ingestion(video_link,session_id):
         try:
             lang_list = []
             lang_list.append(lang_code)
+            print('here 2nd')
             data = ytt_api.fetch(video_id,languages=lang_list)
             lang = lang_code
             lang_success = True
