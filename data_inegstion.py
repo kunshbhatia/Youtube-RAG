@@ -12,7 +12,7 @@ import requests
 
 def data_ingestion(video_link,session_id):
     #GETTING VIDEO INFO FROM YOUTUBE
-
+    print('atleast here')
     ytt_api = YouTubeTranscriptApi(proxy_config=WebshareProxyConfig(
         proxy_username=st.secrets["YOUR_USERNAME"],
         proxy_password=st.secrets["YOUR_PASSWORD"])) #To Bypass IP Block on deployed server
