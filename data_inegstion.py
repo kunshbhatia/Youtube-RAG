@@ -11,7 +11,18 @@ import requests
 
 def data_ingestion(video_link,session_id):
     #GETTING VIDEO INFO FROM YOUTUBE
-    ytt_api = YouTubeTranscriptApi() #To Bypass IP Block on deployed server
+    session = requests.Session()
+
+    session.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/122.0.0.0 Safari/537.36"
+        ),
+        "Accept-Language": "en-US,en;q=0.9"
+    })
+
+    ytt_api = YouTubeTranscriptApi(http_client=session) #To Bypass IP Block on deployed server
     url = video_link.split("=")
     video_id = url[1]
 
@@ -19,6 +30,7 @@ def data_ingestion(video_link,session_id):
 
     lang_success = False
     for lang_code in possible_languages:
+
         try:
             lang_list = []
             lang_list.append(lang_code)

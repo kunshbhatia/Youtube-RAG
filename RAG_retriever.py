@@ -6,12 +6,12 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 import streamlit as st
 
-try:
-    groq_api = st.secrets["GROQ_API_KEY"] #Streamlit Use
-except:
-    groq_api = ["GROQ_API_KEY"] #Personal Use
-
 def rag_retriever(query,session_id,queries=[]):
+    try:
+        groq_api = st.secrets["GROQ_API_KEY"] #Streamlit Use
+    except:
+        groq_api = "GROQ_API_KEY" #Personal Use
+    
     embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     #Made by Kunsh Bhatia
     database = Chroma(
