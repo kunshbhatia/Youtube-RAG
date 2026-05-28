@@ -8,6 +8,7 @@ from googletrans import Translator #To Translate the text to english for LLM
 import httpx #Remove Timeout
 from utilities import get_video_details
 import asyncio
+import streamlit as st
 
 
 def data_ingestion(video_link,session_id):
@@ -29,11 +30,12 @@ def data_ingestion(video_link,session_id):
             lang_success = True
             break
 
-        except:
-            continue
+        except Exception as e:
+            print(f"Exception is {e}")
+
 
     if not lang_success:
-        raise Exception("No transcript available")
+        raise st.error("Please Try Again After Some Time")
 
     text_data = '' #Adding all the text in string format in local language
     for sent in data.snippets:
