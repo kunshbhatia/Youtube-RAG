@@ -1,4 +1,6 @@
+import re
 import yt_dlp
+
 
 def get_video_details(url):
 
@@ -18,3 +20,19 @@ def get_video_details(url):
         return title,description,channel,views,duration,thumbnail
     
 #Made by Kunsh Bhatia
+
+
+def extract_video_id(youtube_url): #Extract the video ID from a YouTube URL.
+
+    patterns = [
+        r'(?:v=|\/)([0-9A-Za-z_-]{11}).*',  # Standard and shortened URLs
+        r'(?:embed\/)([0-9A-Za-z_-]{11})',   # Embed URLs
+        r'(?:youtu\.be\/)([0-9A-Za-z_-]{11})'  # youtu.be URLs
+    ]
+    
+    for pattern in patterns:
+        match = re.search(pattern, youtube_url)
+        if match:
+            return match.group(1)
+    
+    return None

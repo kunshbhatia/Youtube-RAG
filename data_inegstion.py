@@ -6,16 +6,17 @@ from langchain_huggingface import HuggingFaceEmbeddings #Embedding Model
 from langchain_chroma import Chroma #Vector DB 
 from googletrans import Translator #To Translate the text to english for LLM
 import httpx #Remove Timeout
-from utilities import get_video_details
+from utilities import get_video_details,extract_video_id
 import asyncio
 import streamlit as st
 
 
 def data_ingestion(video_link,session_id):
     #GETTING VIDEO INFO FROM YOUTUBE
+
     ytt_api = YouTubeTranscriptApi() #To Bypass IP Block on deployed server
-    url = video_link.split("=")
-    video_id = url[1]
+
+    video_id = extract_video_id(video_link)
 
     possible_languages = ['en','hi','en-IN','en-US','a.en','a.hi','bn','ta','te','ml','kn','mr','gu','pa','ur','fr','de','es','ja','ko','ar','ru']
 
