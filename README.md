@@ -54,7 +54,7 @@ Built with scalable multi-user session support and multilingual transcript proce
 
 <td width="40%">
 
-<img src="./screenshots/2.jpg" width="100%">
+<img src="./screenshots/4.jpg" width="100%">
 
 </td>
 </tr>
@@ -100,7 +100,7 @@ Built with scalable multi-user session support and multilingual transcript proce
 
 <td width="40%">
 
-<img src="./screenshots/4.jpg" width="100%">
+<img src="./screenshots/2.jpg" width="100%">
 
 </td>
 </tr>
