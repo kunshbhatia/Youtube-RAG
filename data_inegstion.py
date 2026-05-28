@@ -7,19 +7,14 @@ from langchain_chroma import Chroma #Vector DB
 from googletrans import Translator #To Translate the text to english for LLM
 import httpx #Remove Timeout
 from utilities import get_video_details
-import streamlit as st
-import requests
+import asyncio
+
 
 def data_ingestion(video_link,session_id):
     #GETTING VIDEO INFO FROM YOUTUBE
-    print('atleast here')
-    ytt_api = YouTubeTranscriptApi(proxy_config=WebshareProxyConfig(
-        proxy_username=st.secrets["YOUR_USERNAME"],
-        proxy_password=st.secrets["YOUR_PASSWORD"])) #To Bypass IP Block on deployed server
-    
+    ytt_api = YouTubeTranscriptApi() #To Bypass IP Block on deployed server
     url = video_link.split("=")
     video_id = url[1]
-    print('here 1')
 
     possible_languages = ['en','hi','en-IN','en-US','a.en','a.hi','bn','ta','te','ml','kn','mr','gu','pa','ur','fr','de','es','ja','ko','ar','ru']
 
@@ -29,7 +24,6 @@ def data_ingestion(video_link,session_id):
         try:
             lang_list = []
             lang_list.append(lang_code)
-            print('here 2nd')
             data = ytt_api.fetch(video_id,languages=lang_list)
             lang = lang_code
             lang_success = True
@@ -64,13 +58,17 @@ def data_ingestion(video_link,session_id):
 
         chunking()
 
-    #TRANSLATION INTO ENGLISH
+        #TRANSLATION INTO ENGLISH
         output = []
-        custom_timeout = httpx.Timeout(20.0, read=None) 
-        translator = Translator(timeout = custom_timeout)
-        for i in final_chunked_data_for_translation:
-            result = translator.translate(i, dest='en')
-            output.append(result.text)
+        custom_timeout = httpx.Timeout(20.0, read=None)
+        translator = Translator(timeout=custom_timeout)
+
+        async def translate_chunks():
+            for i in final_chunked_data_for_translation:
+                result = await translator.translate(i, dest='en')
+                output.append(result.text)
+
+        asyncio.run(translate_chunks())
 
         text_in_english  = ' ' #Adding all the text in string format in the language english
         for i in output:

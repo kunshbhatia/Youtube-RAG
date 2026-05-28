@@ -4,3 +4,4 @@ notebooks
 db
 __pycache__
 .streamlit
+text.py
