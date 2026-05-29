@@ -311,16 +311,6 @@ python-dotenv
 
 ---
 
-# 🌟 Future Improvements
-
-- Timestamp-based answers
-- YouTube playlist support
-- Voice-based questions
-- PDF export for transcripts
-- Better memory-aware conversations
-- Mobile responsive UI
-
----
 
 # 👨‍💻 Author
 
