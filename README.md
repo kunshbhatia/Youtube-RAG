@@ -7,7 +7,7 @@
 Ask questions directly from any YouTube video using  
 **RAG (Retrieval Augmented Generation)**, **LangChain**, **Groq LLM**, and **ChromaDB**.
 
-Built with scalable multi-user session support and multilingual transcript processing.
+Built with scalable multi-user session support and multilingual transcript processing. 
 
 **(Installation Given Below)**
 
