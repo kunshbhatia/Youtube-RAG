@@ -268,11 +268,16 @@ pip install -r requirements.txt
 
 ---
 
-## 4️⃣ Env File
+## 4️⃣ Environment Setup
+
+Create a `.env` file in the root directory of your project and add your [Groq API key](https://groq.com):
 
 ```bash
-Using [GroqAPI](https://console.groq.com/) and make a .env file and type in GROQ_API_KEY=your_api_key_here
+GROQ_API_KEY=your_api_key_here
 ```
+
+> ⚠️ **Note:** Replace `your_api_key_here` with your actual secret key from the Groq console. Never commit your `.env` file to version control (add it to your `.gitignore`).
+
 
 ---
 
