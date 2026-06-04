@@ -268,6 +268,14 @@ pip install -r requirements.txt
 
 ---
 
+## 4️⃣ Env File
+
+```bash
+Using [GroqAPI](https://console.groq.com/) and make a .env file and type in GROQ_API_KEY=your_api_key_here
+```
+
+---
+
 # ▶️ Run The Application
 
 ```bash
