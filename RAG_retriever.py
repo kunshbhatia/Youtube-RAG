@@ -62,7 +62,8 @@ def rag_retriever(query,session_id,queries=[]):
         - Focus only on the user's question.
         - If exact answer is unavailable, say : "I don't know based on this video."
         - Keep answer long enough and properly informative with respect to the context to keep the user engaged 
-        - You are allowed to use internet and external sources to gather information about a specific part of context to make user understand better."""
+        - You are allowed to use internet and external sources to gather information about a specific part of context to make user understand better.
+        - Answer Only and Only in English language , unless and until you are told to use any other language"""
 
     final_messages = [
             SystemMessage(content="You answer questions from retrieved context."),
