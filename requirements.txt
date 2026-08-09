@@ -24,4 +24,3 @@ httpx==0.28.1
 python-dotenv==1.2.2
 protobuf==6.33.6
 
-starlette<0.40.0
