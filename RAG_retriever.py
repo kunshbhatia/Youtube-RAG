@@ -24,7 +24,7 @@ def rag_retriever(query,session_id,queries=[]):
     model = ChatGroq(
         api_key=os.getenv(groq_api),
         temperature=0,
-        model_name="llama-3.1-8b-instant"
+        model_name="llama-3.3-70b-specdec"
     )
 
     #queries.insert(0, query) #Insert new query at first position
@@ -48,7 +48,7 @@ def rag_retriever(query,session_id,queries=[]):
     model = ChatGroq(
         api_key=os.getenv(groq_api),
         temperature=0.1,
-        model_name="llama-3.1-8b-instant"
+        model_name="llama-3.3-70b-specdec"
             )
 
     final_prompt = f"""You are a precise video question-answering assistant.
